@@ -5,4 +5,5 @@ export class DestinationDto {
   logoWidth: number;
   logoHeight: number;
   scale?: number;
+  isReversed: boolean;
 }

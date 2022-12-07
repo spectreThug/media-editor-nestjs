@@ -42,8 +42,9 @@ export class DestinationService {
     };
     const destinations = {
       TOP: () => {
-        returnedObj.y =
-          destinationDto.height - destinationDto.logoHeight - padding.y;
+        returnedObj.y = destinationDto.isReversed
+          ? returnedObj.y + padding.y
+          : destinationDto.height - destinationDto.logoHeight - padding.y;
       },
       LEFT: () => {
         returnedObj.x = returnedObj.x + padding.x;
@@ -53,7 +54,9 @@ export class DestinationService {
           destinationDto.width - destinationDto.logoWidth - padding.x;
       },
       BOTTOM: () => {
-        returnedObj.y = returnedObj.y + padding.y;
+        returnedObj.y = destinationDto.isReversed
+          ? destinationDto.height - destinationDto.logoHeight - padding.y
+          : returnedObj.y + padding.y;
       },
       CENTER: () => {
         if (returnedObj.y == 0)
@@ -74,10 +77,8 @@ export class DestinationService {
   //TOP-CENTER
   FORMULA_CODE_4(formula: string[], destinationDto: DestinationDto) {
     //TOP=10,LEFT=10 //TOP , 10 , LEFT , 10
-
     const positions = [formula[0], formula[2]]; //TOP,LEFT
     const padding = [formula[1], formula[3]];
-
     return this.calculator(
       positions,
       destinationDto,
@@ -97,14 +98,16 @@ export class DestinationService {
       parseInt(formula[1]) > destinationDto.width
     )
       throw new BadRequestException('Invalid positions');
-
     return {
       y: parseInt(formula[0]),
       x: parseInt(formula[1]),
     };
   }
 
-  destinationCalculator(destinationDto: DestinationDto) {
+  destinationCalculator(destinationDto: DestinationDto): {
+    x: number;
+    y: number;
+  } {
     const regex = /[,=]/g;
     //TOP=10,LEFT=10
     const formula = destinationDto.position.split(regex);

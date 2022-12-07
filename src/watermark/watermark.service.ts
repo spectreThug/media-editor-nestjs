@@ -71,8 +71,6 @@ export class WatermarkService {
       await this.watermarkTokensService[fileType.token](handoverData);
   }
 
-  //  const position = y.concat("=", paddingY, ",", x, "=", paddingX);
-
   async addWaterMarkWithPadding(
     organization: OrganizationDto,
     settings: CustomWatermarkWithLogoDto,
@@ -94,6 +92,8 @@ export class WatermarkService {
       settings.attachment.originalname,
       Operations.Watermark,
     );
+
+    //TODO:Add support for JPG logo
 
     let handoverData: WatermarkDto = {
       applyOnAll: settings.applyOnAll || false,
